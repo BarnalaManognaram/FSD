@@ -4,24 +4,31 @@
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal</Portal></title>
+    <link rel="stylesheet" href="./Home.css">
+    <link rel="stylesheet" href="./login.css">
     </head>
     <body>
         <header>
             <h2>Student Portal</h2>
         </header>
-        <nav aria-label="Primary Navigator">
-         <a href="./Home.html">Home</a>
+        <nav aria-label="Primary Navigator" class="navbar">
+          <a href="./Home.html">Home</a>
           <a href="./ExamSection.html">Exam Section</a>
-          <a href="./Profile">Profile</a>
+          <a href="./profile.html">Profile</a>
           <a href="#">Login</a>
         </nav>
         <main>
-            <section id="login">
+            <section class="login">
+                <fieldset>
+                    <legend>Login</legend>
                 <form method="post">
-                    <input id="email" type="email" name="email" placeholder="Email">
-                    <input id="password" type="password" name="password" placeholder="Password">
+                    <label for="red_no">Reg No:</label><br>
+                    <input id="RegNo" type="text" name="RegNo" placeholder="RegNo"><br><br>
+                    <label for="password">Password:</label><br>
+                    <input id="password" type="password" name="password" placeholder="Password"><br><br>
                     <input id="submitBtn" type="submit">
                 </form>
+                </fieldset>
             </section>
         </main>
     </body>

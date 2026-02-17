@@ -1,0 +1,12 @@
+.navbar{
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+ .navbar a { 
+    text-decoration: none; 
+    padding: 6px 10px; 
+    border: 1px solid #aaa; 
+}
