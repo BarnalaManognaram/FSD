@@ -4,9 +4,25 @@
     gap: 12px;
     padding: 10px;
     border: 1px solid #ccc;
+    border-radius: 4px;
 }
  .navbar a { 
     text-decoration: none; 
     padding: 6px 10px; 
     border: 1px solid #aaa; 
+    border-radius: 4px;
+    
 }
+.navbar a:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    transform: scaleY(1.10);
+}
+/* body{
+    background-color: lightblue;
+    color: white;
+} */
+/* #logo{
+    color: white;
+} */
