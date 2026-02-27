@@ -11,7 +11,6 @@
     padding: 6px 10px; 
     border: 1px solid #aaa; 
     border-radius: 4px;
-    
 }
 .navbar a:hover {
     background-color: #007bff;
@@ -19,10 +18,16 @@
     border-color: #007bff;
     transform: scaleY(1.10);
 }
-/* body{
-    background-color: lightblue;
-    color: white;
-} */
+body{
+    background-color: rgb(245, 238, 227)
+}
 /* #logo{
     color: white;
 } */
+
+.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    transform: scaleY(1.10);
+}
