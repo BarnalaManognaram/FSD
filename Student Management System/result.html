@@ -5,6 +5,7 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal</title>
     <link rel="stylesheet" href="./style/Home.css">
+        <link rel="stylesheet" href="./style/result.css">
     </head>
     <body>
         <header>
@@ -17,9 +18,29 @@
             <a href="./login.html">Login</a>
         </nav>
         <main>
-          <form>
-            <input type="dropdown" placeholder="Select Year">
+            <section class="result-section">
+          <form action="#" method="post" class="result-form">
+            <h2>Result</h2>
+            <label>Select Year:</label>
+                <select id="year">
+                <option value="" disabled selected>Select Year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+                </select>
+                <br><br>
+                <label>Select Semester:</label>
+                <select id="semester" required>
+                <option value="" disabled selected>Select Semester</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                </select><br><br>
+               <input id="submitBtn" type="submit">
           </form>
+          </section>
         </main>
     </body>
 </html>
