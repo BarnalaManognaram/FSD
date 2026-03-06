@@ -1,4 +1,5 @@
 .navbar{
+    background-color: #065f46;
     display: flex;
     justify-content: flex-end;
     gap: 12px;
@@ -7,27 +8,19 @@
     border-radius: 4px;
 }
  .navbar a { 
+    background-color: #10b981;
     text-decoration: none; 
     padding: 6px 10px; 
-    border: 1px solid #aaa; 
+    border: 1px solid #10b981;
     border-radius: 4px;
+     color: white;
 }
 .navbar a:hover {
-    background-color: #007bff;
+    background-color: #047857;
     color: white;
-    border-color: #007bff;
+    border-color: #047857;
     transform: scaleY(1.10);
 }
 body{
     background-color: rgb(245, 238, 227)
-}
-/* #logo{
-    color: white;
-} */
-
-.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-    transform: scaleY(1.10);
 }
