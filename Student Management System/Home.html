@@ -5,6 +5,8 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal</title>
     <link rel="stylesheet" href="./style/Home.css">
+    <link rel="stylesheet" href="./style/ExamSection.css">
+    </head>
     </head>
     <body>
         <header>
@@ -17,7 +19,21 @@
           <a href="./login.html" id="loginLink">Login</a>
           <a href="./login.html" id="logoutLink">Logout</a>
         </nav>
-        <h1>Welcome to the Student Portal</h1>   
+        <h1   align="center">Welcome to the Student Portal</h1>   
+        <main>
+           <div class="grid-container">
+                 <button class="box" onclick="window.location.href='./mycgpa.html'">
+                    <img src="./icons/mycgpa.png" alt="CGPA Icon" class="icon" height="90px" width="90px" ><br>
+                    Pay Fees
+                  </button>
+                 <button class="box" onclick="window.location.href='./result.html'">
+                    <img src="./icons/result.png" alt="Result Icon" class="icon" height="90px" width="90px" ><br>
+                    Internal Marks</button>
+                      <button class="box" onclick="window.location.href='./result.html'">
+                    <img src="./icons/result.png" alt="Result Icon" class="icon" height="90px" width="90px" ><br>
+                    Attendance register</button>
+           </div>
+           </main>
         <script src="./javascript/home.js"></script>   
     </body>
 </html>
