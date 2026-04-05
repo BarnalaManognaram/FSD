@@ -1,5 +1,5 @@
 function onload() {
-    const user = JSON.parse(localStorage.getItem('RegNo'));    
+    const user = localStorage.getItem('RegNo');    
     const homeLink = document.getElementById("homeLink");   
     const examLink = document.getElementById("ExamLink");
     const profileLink = document.getElementById("profileLink");
