@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Attendance Portal</title>
+<title>Student Portal</title>
 <style>
 body { font-family: Arial; background:#f4f6f9; margin:0; }
 header { background:#4a90e2; color:#fff; padding:15px; text-align:center; font-size:20px; }
@@ -13,11 +13,6 @@ table { width:100%; border-collapse:collapse; }
 th, td { padding:10px; text-align:center; border-bottom:1px solid #ddd; }
 th { background:#4a90e2; color:white; }
 .eye { cursor:pointer; color:#4a90e2; font-weight:bold; }
-.calendar { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-top:10px; }
-.day { padding:10px; border-radius:6px; font-size:12px; }
-.present { background:#d4edda; color:#155724; }
-.absent { background:#f8d7da; color:#721c24; }
-
 button {
   padding: 6px 12px;
   font-size: 16px;
@@ -31,17 +26,18 @@ button {
 </head>
 <body>
 
-<header>Student Attendance</header>
+<header>Student Internal Marks Portal</header>
 
 <div class="container">
 
-<div class="card">
+<!-- SUBJECT LIST -->
+<div class="card" id="subjectCard">
 <h3>Subjects</h3>
 <table>
 <thead>
 <tr>
 <th>Subject</th>
-<th>Attendance %</th>
+<th>Average Marks</th>
 <th>View</th>
 </tr>
 </thead>
@@ -49,9 +45,19 @@ button {
 </table>
 </div>
 
+<!-- DETAILS -->
 <div class="card" id="detailsCard" style="display:none;">
 <h3 id="subjectTitle"></h3>
-<div id="calendar" class="calendar"></div>
+<table>
+<thead>
+<tr>
+<th>Exam</th>
+<th>Marks</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody id="marksTable"></tbody>
+</table>
 </div>
 
 </div>
@@ -63,17 +69,21 @@ const subjects = [
   { id:3, name:"Chemistry" }
 ];
 
-// sample data per subject
-const attendance = {
-  1: {
-    "2026-04-01":"P","2026-04-02":"A","2026-04-03":"P","2026-04-04":"P"
-  },
-  2: {
-    "2026-04-01":"A","2026-04-02":"A","2026-04-03":"P"
-  },
-  3: {
-    "2026-04-01":"P","2026-04-02":"P","2026-04-03":"P"
-  }
+// sample marks data
+const marksData = {
+  1: [
+    { exam:"Mid 1", marks:24, total:30 },
+    { exam:"Mid 2", marks:26, total:30 },
+    { exam:"Assignment", marks:18, total:20 }
+  ],
+  2: [
+    { exam:"Mid 1", marks:20, total:30 },
+    { exam:"Mid 2", marks:22, total:30 }
+  ],
+  3: [
+    { exam:"Mid 1", marks:25, total:30 },
+    { exam:"Mid 2", marks:27, total:30 }
+  ]
 };
 
 function renderSubjects(){
@@ -81,10 +91,10 @@ function renderSubjects(){
   table.innerHTML="";
 
   subjects.forEach(sub=>{
-    const records = attendance[sub.id] || {};
-    const total = Object.keys(records).length;
-    const present = Object.values(records).filter(v=>v==='P').length;
-    const percent = total ? ((present/total)*100).toFixed(1):0;
+    const records = marksData[sub.id] || [];
+    const totalMarks = records.reduce((sum,r)=>sum+r.marks,0);
+    const totalMax = records.reduce((sum,r)=>sum+r.total,0);
+    const percent = totalMax ? ((totalMarks/totalMax)*100).toFixed(1):0;
 
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -97,30 +107,30 @@ function renderSubjects(){
   });
 }
 
-function viewDetails(subjectId, name){
+function viewDetails(id, name){
   document.getElementById("detailsCard").style.display="block";
-  document.getElementById("subjectTitle").innerText = name + " - Monthly Attendance";
+  document.getElementById("subjectCard").style.display="none";
+  document.getElementById("subjectTitle").innerText = name + " - Internal Marks";
 
-  const cal = document.getElementById("calendar");
-  cal.innerHTML="";
+  const table = document.getElementById("marksTable");
+  table.innerHTML="";
 
-  const year = 2026;
-  const month = 3; // April (0-based)
+  const records = marksData[id] || [];
 
-  const days = new Date(year, month+1, 0).getDate();
-  const records = attendance[subjectId] || {};
+  records.forEach(r=>{
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${r.exam}</td>
+      <td>${r.marks}</td>
+      <td>${r.total}</td>
+    `;
+    table.appendChild(row);
+  });
+}
 
-  for(let d=1; d<=days; d++){
-    const formattedDate = `${d}-4-${year}`;
-    const date = `${year}-04-${String(d).padStart(2,'0')}`;
-    const status = records[date] || 'A';
-
-    const div = document.createElement("div");
-    div.className = "day " + (status==='P' ? 'present':'absent');
-    div.innerText = formattedDate + "\n" + status;
-
-    cal.appendChild(div);
-  }
+function goBack(){
+  document.getElementById("detailsCard").style.display="none";
+  document.getElementById("subjectCard").style.display="block";
 }
 
 renderSubjects();
