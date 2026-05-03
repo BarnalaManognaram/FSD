@@ -52,7 +52,7 @@ exports.createUser = async (req, res) => {
 
     const newUser = await User.create({
       name,
-      regNo,
+      regNo: regNo.trim().toUpperCase(),  // ✅ standardize regNo
       email,
       course,
       branch,
@@ -60,7 +60,8 @@ exports.createUser = async (req, res) => {
       cgpa,
       phone,
       address,
-      role: "student" // ✅ ensure role is always student
+      role: "student",
+      password: regNo.trim().toUpperCase()  // ✅ default password = regNo
     });
 
     sendResponse(res, 201, true, newUser, "User created");

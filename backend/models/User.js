@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "student",   // ✅ always student by default
     enum: ["student", "admin"]
-  }
+  },
+  password: { type: String, required: true }
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema,"student");
