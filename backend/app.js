@@ -5,8 +5,10 @@ const userRoutes = require('./routes/userRoutes');
 const errorHandler = require('./middleware/errorHandler');
 const logger = require('./middleware/logger');
 const connectDB = require("./config/db");
+const cors = require("cors");
 // Middleware
 app.use(express.json());
+app.use(cors());   // ✅ THIS LINE FIXES YOUR ERROR
 app.use(logger);
 
 // Routes
