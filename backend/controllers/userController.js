@@ -18,7 +18,7 @@ exports.getUsers = async (req, res) => {
 // GET single user
 exports.getUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.regNo.toUpperCase().trim());
 
     if (!user) {
       return sendResponse(res, 404, false, null, "User not found");
@@ -73,9 +73,11 @@ exports.createUser = async (req, res) => {
 // UPDATE user
 exports.updateUser = async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      req.body, // update all fields
+    const regNo = req.params.regNo.toUpperCase().trim();
+
+    const updatedUser = await User.findOneAndUpdate(
+      { regNo: regNo },   // 🔥 FIX: search by regNo field
+      req.body,
       { new: true }
     );
 
@@ -84,15 +86,17 @@ exports.updateUser = async (req, res) => {
     }
 
     sendResponse(res, 200, true, updatedUser, "User updated");
+
   } catch (error) {
     sendResponse(res, 500, false, null, error.message);
   }
-};;
+};
 
 // DELETE user
 exports.deleteUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const regNo = req.params.regNo.toUpperCase().trim();
+    const user = await User.findOneAndDelete({ regNo: regNo });
 
     if (!user) {
       return sendResponse(res, 404, false, null, "User not found");
@@ -108,7 +112,7 @@ exports.loginUser = async (req, res) => {
     const { regNo, password } = req.body;
 
     // 1. Check if user exists
-    const user = await User.findOne({ regNo });
+    const user = await User.findOne({ regNo: regNo.toUpperCase().trim() });
     if (!user) {
       return sendResponse(res, 400, false, null, "User not found");
     }

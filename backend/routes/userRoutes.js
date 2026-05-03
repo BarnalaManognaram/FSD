@@ -12,9 +12,9 @@ const {
 
 // Routes
 router.get('/', getUsers);
-router.get('/:id', getUser);
+router.get('/:regNo', getUser);
 router.post('/', createUser);
-router.put('/:id', updateUser);
-router.delete('/:id', deleteUser);
+router.put('/:regNo', updateUser);
+router.delete('/:regNo', deleteUser);
 router.post('/login', loginUser);
 module.exports = router;
