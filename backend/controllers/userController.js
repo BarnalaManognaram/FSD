@@ -33,13 +33,35 @@ exports.getUser = async (req, res) => {
 // CREATE user
 exports.createUser = async (req, res) => {
   try {
-    const { name } = req.body;
+    const {
+      name,
+      regNo,
+      email,
+      course,
+      branch,
+      year,
+      cgpa,
+      phone,
+      address
+    } = req.body;
 
-    if (!name) {
-      return sendResponse(res, 400, false, null, "Name is required");
+    // Basic validation
+    if (!name || !regNo || !email) {
+      return sendResponse(res, 400, false, null, "Required fields missing");
     }
 
-    const newUser = await User.create({ name });
+    const newUser = await User.create({
+      name,
+      regNo,
+      email,
+      course,
+      branch,
+      year,
+      cgpa,
+      phone,
+      address,
+      role: "student" // ✅ ensure role is always student
+    });
 
     sendResponse(res, 201, true, newUser, "User created");
   } catch (error) {
@@ -50,27 +72,21 @@ exports.createUser = async (req, res) => {
 // UPDATE user
 exports.updateUser = async (req, res) => {
   try {
-    const { name } = req.body;
-
-    if (!name) {
-      return sendResponse(res, 400, false, null, "Name is required");
-    }
-
-    const user = await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      { name },
+      req.body, // update all fields
       { new: true }
     );
 
-    if (!user) {
+    if (!updatedUser) {
       return sendResponse(res, 404, false, null, "User not found");
     }
 
-    sendResponse(res, 200, true, user, "User updated");
+    sendResponse(res, 200, true, updatedUser, "User updated");
   } catch (error) {
     sendResponse(res, 500, false, null, error.message);
   }
-};
+};;
 
 // DELETE user
 exports.deleteUser = async (req, res) => {

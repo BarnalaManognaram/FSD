@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Module Form</title>
+    <link rel="stylesheet" href="./register.css">
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Register Student</h2>
+    <form id="studentForm">
+
+        <label>Name</label>
+        <input type="text" name="name" placeholder="Enter full name" required>
+
+        <label>Registration Number</label>
+        <input type="text" name="regNo" placeholder="e.g. 21CS001" required>
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="example@mail.com" required>
+
+        <label>Course</label>
+        <input type="text" name="course" placeholder="B.Tech / M.Tech" required>
+
+        <label>Branch</label>
+        <input type="text" name="branch" placeholder="CSE / ECE / IT" required>
+
+        <label>Year</label>
+        <select name="year" required>
+            <option value="">Select Year</option>
+            <option>1st Year</option>
+            <option>2nd Year</option>
+            <option>3rd Year</option>
+            <option>4th Year</option>
+        </select>
+
+        <label>CGPA</label>
+        <input type="number" step="0.01" name="cgpa" min="0" max="10" placeholder="0 - 10" required>
+
+        <label>Phone Number</label>
+        <input type="tel" name="phone" pattern="[6-9]{1}[0-9]{9}" placeholder="10-digit number" required>
+
+        <label>Address</label>
+        <textarea name="address" rows="3" placeholder="Enter address" required></textarea>
+
+        <button type="submit">Submit</button>
+
+        <div class="success" id="successMsg"></div>
+    </form>
+</div>
+
+<script src="register.js">
+</script>
+
+</body>
+</html>
