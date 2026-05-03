@@ -1,12 +1,36 @@
-function login(event) {
-    event.preventDefault(); // stop page reload
+async function login(event) {
+    event.preventDefault();
 
     let regNo = document.getElementById("RegNo").value;
     let password = document.getElementById("password").value;
 
-    localStorage.setItem("RegNo", regNo);
-    console.log("RegNo:", localStorage.getItem("RegNo"));
-    console.log("Password:", password);
-    // localStorage.removeItem("RegNo")
-     window.location.href = "./Home.html";
+    try {
+        const response = await fetch("http://localhost:3000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ regNo, password }) // ✅ send to backend
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // ✅ store user info
+            localStorage.setItem("RegNo", regNo);
+          console.log("RegNo:", localStorage.getItem("RegNo"));
+          console.log("Password:", password);
+
+            alert("Login successful");
+
+            // ✅ redirect after success
+            window.location.href = "./Home.html";
+        } else {
+            alert(data.message); // invalid user/password
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Unable to connect to server");
+    }
 }

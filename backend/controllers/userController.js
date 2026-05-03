@@ -103,3 +103,25 @@ exports.deleteUser = async (req, res) => {
     sendResponse(res, 500, false, null, error.message);
   }
 };
+exports.loginUser = async (req, res) => {
+  try {
+    const { regNo, password } = req.body;
+
+    // 1. Check if user exists
+    const user = await User.findOne({ regNo });
+    if (!user) {
+      return sendResponse(res, 400, false, null, "User not found");
+    }
+
+    // 2. Check password
+    if (user.password !== password) {
+      return sendResponse(res, 400, false, null, "Invalid password");
+    }
+
+    // 3. Success
+    sendResponse(res, 200, true, user, "Login successful");
+
+  } catch (error) {
+    sendResponse(res, 500, false, null, error.message);
+  }
+};
