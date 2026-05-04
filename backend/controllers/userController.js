@@ -18,7 +18,7 @@ exports.getUsers = async (req, res) => {
 // GET single user
 exports.getUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.regNo.toUpperCase().trim());
+    const user = await User.findOne({ regNo: req.params.regNo.toUpperCase().trim() });
 
     if (!user) {
       return sendResponse(res, 404, false, null, "User not found");

@@ -39,13 +39,13 @@ async function onload() {
         }
 
         try {
-            const response = await fetch(`http://localhost:3000/?regNo=${user}`);
+            const response = await fetch(`http://localhost:3000/${user}`);
 
             if (!response.ok) {
                 throw new Error(`HTTP error: ${response.status}`);
             }
 
-            const userData = (await response.json()).data[0];
+            const userData = (await response.json()).data;
             console.log("User data:", userData);
 
             if (nameElement) nameElement.textContent = "Name: " + userData.name;
