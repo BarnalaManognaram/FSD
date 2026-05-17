@@ -17,11 +17,10 @@ async function login(event) {
 
         if (response.ok) {
             // ✅ store user info
-            localStorage.setItem("RegNo", regNo);
-          console.log("RegNo:", localStorage.getItem("RegNo"));
+            sessionStorage.setItem("userData", JSON.stringify(data.data));
+          console.log("RegNo:", sessionStorage.getItem("userData") ? JSON.parse(sessionStorage.getItem("userData")).regNo : null);
           console.log("Password:", password);
 
-            alert("Login successful");
 
             // ✅ redirect after success
             window.location.href = "./Home.html";
