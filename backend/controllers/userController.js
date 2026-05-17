@@ -40,6 +40,7 @@ exports.createUser = async (req, res) => {
       course,
       branch,
       year,
+      semester,
       cgpa,
       phone,
       address
@@ -49,6 +50,24 @@ exports.createUser = async (req, res) => {
     if (!name || !regNo || !email) {
       return sendResponse(res, 400, false, null, "Required fields missing");
     }
+     const defaultCourses = [
+      {
+        courseName: "C Programming",
+        courseCode: "CS101",
+        year: 1,
+        semester: 1,
+        marks: 0,
+        grade: "NA"
+      },
+      {
+        courseName: "DSA",
+        courseCode: "CS102",
+        year: 1,
+        semester: 2,
+        marks: 0,
+        grade: "NA"
+      }
+    ];
 
     const newUser = await User.create({
       name,
@@ -57,10 +76,11 @@ exports.createUser = async (req, res) => {
       course,
       branch,
       year,
+      semester,
       cgpa,
       phone,
+      courses: defaultCourses,
       address,
-      role: "student",
       password: regNo.trim().toUpperCase()  // ✅ default password = regNo
     });
 
@@ -127,5 +147,97 @@ exports.loginUser = async (req, res) => {
 
   } catch (error) {
     sendResponse(res, 500, false, null, error.message);
+  }
+};
+
+
+exports.getCoursesBySemester = async (req, res) => {
+  try {
+
+    const regNo = req.params.regNo
+      .toUpperCase()
+      .trim();
+
+    // Find user first
+    const user = await User.findOne({ regNo });
+
+    if (!user) {
+      return sendResponse(
+        res,
+        404,
+        false,
+        null,
+        "User not found"
+      );
+    }
+
+    // Get current year from user
+    const currentYear = Number(user.year);
+    const currentSemester = Number(user.semester);
+
+    // Aggregation
+    const courses = await User.aggregate([
+
+      // Match student
+      {
+        $match: {
+          regNo: regNo
+        }
+      },
+
+      // Convert courses array into documents
+      {
+        $unwind: "$courses"
+      },
+
+      // Filter current year courses
+      {
+        $match: {
+          "courses.year": currentYear,  
+          "courses.semester": currentSemester
+        }
+      },
+
+      // Return selected fields
+      {
+        $project: {
+          _id: 0,
+          courseName: "$courses.courseName",
+          courseCode: "$courses.courseCode",
+          year: "$courses.year",
+          semester: "$courses.semester",
+          marks: "$courses.marks",
+          grade: "$courses.grade"
+        }
+      }
+
+    ]);
+
+    if (!courses.length) {
+      return sendResponse(
+        res,
+        404,
+        false,
+        null,
+        "No courses found"
+      );
+    }
+
+    sendResponse(
+      res,
+      200,
+      true,
+      courses
+    );
+
+  } catch (error) {
+
+    sendResponse(
+      res,
+      500,
+      false,
+      null,
+      error.message
+    );
   }
 };

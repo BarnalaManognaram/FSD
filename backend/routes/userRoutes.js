@@ -7,7 +7,8 @@ const {
   createUser,
   updateUser,
   deleteUser,
-  loginUser
+  loginUser,
+  getCoursesBySemester
 } = require('../controllers/userController');
 
 // Routes
@@ -17,4 +18,5 @@ router.post('/', createUser);
 router.put('/:regNo', updateUser);
 router.delete('/:regNo', deleteUser);
 router.post('/login', loginUser);
+router.get('/currentCourses/:regNo/', getCoursesBySemester);
 module.exports = router;

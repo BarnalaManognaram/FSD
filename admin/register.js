@@ -29,6 +29,7 @@ document.getElementById("studentForm").addEventListener("submit", async function
         course: this.course.value,
         branch: this.branch.value,
         year: this.year.value,
+        semester: this.semester.value,
         cgpa: parseFloat(this.cgpa.value),
         phone: phone,
         address: this.address.value
