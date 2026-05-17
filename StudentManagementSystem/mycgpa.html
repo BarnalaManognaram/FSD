@@ -1,52 +1,246 @@
 <!DOCTYPE html>
 <html>
-    <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Portal</title>
-    <link rel="stylesheet" href="./style/Home.css">
-    <link rel="stylesheet" href="./style/mycgpa.css">
-    </head>
-    <body>
-      <script src="./javascript/home.js"></script>
-     <header>
-           <img src="./icons/vignan.png" alt="Vignan Logo" width="120px" height="60px">
-        </header>
-         <nav aria-label="Primary Navigator" class="navbar">
-             <a id="homeLink" href="./Home.html">Home</a>
-          <a href="./ExamSection.html" id="ExamLink">Exam Section</a>
-          <a href="./Profile.html" id="profileLink">Profile</a>
-          <a href="./login.html" id="loginLink">Login</a>
-           <a href="./login.html" id="logoutLink">Logout</a>
-        </nav>
-        <main>
-            <h3>My CGPA: 9.0</h3>
-        <table>
-  <tr>
-    <th>Course Code</th>
-    <th>Course</th>
-    <th>Grade</th>
-    <th>Result</th>
-  </tr>
-  <tr>
-    <td>101</td>
-    <td>DAA</td>
-    <td>9.0</td>
-    <td>Pass</td>
-  </tr>
-  <tr>
-    <td>102</td>
-    <td>DS</td>
-    <td>9.0</td>
-    <td>Pass</td>
-  </tr>
-  <tr>
-    <td>103</td>
-    <td>ML</td>
-    <td>9.0</td>
-    <td>Pass</td>
-  </tr>
-</table>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Portal</title>
+
+<link rel="stylesheet" href="./style/Home.css">
+<link rel="stylesheet" href="./style/mycgpa.css">
+
+<style>
+
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f6f9;
+  margin:0;
+  padding:0;
+}
+
+main{
+  padding:20px;
+}
+
+h3{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+th, td{
+  padding:12px;
+  text-align:center;
+  border-bottom:1px solid #ddd;
+}
+
+th{
+  background:#10b981;
+  color:white;
+}
+
+.pass{
+  color:green;
+  font-weight:bold;
+}
+
+.fail{
+  color:red;
+  font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<script src="./javascript/home.js"></script>
+
+<header>
+
+  <img
+    src="./icons/vignan.png"
+    alt="Vignan Logo"
+    width="120px"
+    height="60px"
+  >
+
+</header>
+
+<nav
+  aria-label="Primary Navigator"
+  class="navbar"
+>
+
+  <a id="homeLink" href="./Home.html">
+    Home
+  </a>
+
+  <a href="./ExamSection.html" id="ExamLink">
+    Exam Section
+  </a>
+
+  <a href="./Profile.html" id="profileLink">
+    Profile
+  </a>
+
+  <a href="./login.html" id="loginLink">
+    Login
+  </a>
+
+  <a href="./login.html" id="logoutLink">
+    Logout
+  </a>
+
+</nav>
+
+<main>
+
+  <!-- CGPA -->
+  <h3 id="cgpaText">
+    My CGPA: Loading...
+  </h3>
+
+  <!-- TABLE -->
+  <table>
+
+    <thead>
+
+      <tr>
+        <th>Course Code</th>
+        <th>Course</th>
+        <th>Grade</th>
+        <th>Result</th>
+      </tr>
+
+    </thead>
+
+    <tbody id="cgpaTable">
+
+      <tr>
+        <td colspan="4">
+          Loading results...
+        </td>
+      </tr>
+
+    </tbody>
+
+  </table>
+
 </main>
-    </body>
+
+<script>
+
+// ======================================
+// LOAD USER DATA FROM SESSION STORAGE
+// ======================================
+
+const userData =
+  JSON.parse(
+    sessionStorage.getItem("userData")
+  );
+
+// ======================================
+// CHECK USER
+// ======================================
+
+if(!userData){
+
+  alert("No user data found");
+
+  window.location.href = "./login.html";
+}
+
+// ======================================
+// UPDATE CGPA
+// ======================================
+
+document.getElementById("cgpaText")
+  .innerText =
+    `My CGPA: ${userData.cgpa || 0}`;
+
+// ======================================
+// LOAD COURSES
+// ======================================
+
+const courses =
+  userData.courses || [];
+
+// ======================================
+// TABLE BODY
+// ======================================
+
+const table =
+  document.getElementById("cgpaTable");
+
+table.innerHTML = "";
+
+// ======================================
+// NO COURSES
+// ======================================
+
+if(courses.length === 0){
+
+  table.innerHTML = `
+    <tr>
+      <td colspan="4">
+        No completed courses found
+      </td>
+    </tr>
+  `;
+}
+
+// ======================================
+// RENDER COURSES
+// ======================================
+
+courses.forEach(course => {
+
+  const row =
+    document.createElement("tr");
+
+  // Pass / Fail
+  const result =
+    course.grade === "F"
+      ? "Fail"
+      : "Pass";
+
+  const resultClass =
+    result === "Pass"
+      ? "pass"
+      : "fail";
+
+  row.innerHTML = `
+
+    <td>${course.courseCode}</td>
+
+    <td>${course.courseName}</td>
+
+    <td>${course.grade}</td>
+
+    <td class="${resultClass}">
+      ${result}
+    </td>
+
+  `;
+
+  table.appendChild(row);
+
+});
+
+</script>
+
+</body>
+
 </html>

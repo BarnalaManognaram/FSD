@@ -1,24 +1,342 @@
 <!DOCTYPE html>
-<html>
-    <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Portal</title>
-    <link rel="stylesheet" href="./style/Home.css">
-    <link rel="stylesheet" href="./style/ExamSection.css">
-    </head>
-    <body>
-      <header>
-          <img src="./icons/vignan.png" alt="Vignan Logo" width="120px" height="60px">
-        </header>
-         <nav aria-label="Primary Navigator" class="navbar">
-             <a id="homeLink" href="./Home.html">Home</a>
-          <a href="./ExamSection.html" id="ExamLink">Exam Section</a>
-          <a href="./Profile.html" id="profileLink">Profile</a>
-          <a href="./login.html" id="loginLink">Login</a>
-           <a href="./login.html" id="logoutLink">Logout</a>
-        </nav>
-        <h1>download Hall Ticket</h1>
-        <script src="./javascript/home.js"></script>
-    </body>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hall Ticket</title>
+
+<style>
+
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f6f9;
+  margin:0;
+  padding:0;
+}
+
+.container{
+  width:800px;
+  margin:30px auto;
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.header{
+  text-align:center;
+  border-bottom:2px solid #10b981;
+  padding-bottom:15px;
+  margin-bottom:20px;
+}
+
+.header img{
+  width:120px;
+}
+
+.header h1{
+  margin:10px 0 5px;
+  color:#10b981;
+}
+
+.details{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.detail-box{
+  background:#f9fafb;
+  padding:12px;
+  border-radius:6px;
+}
+
+.detail-box strong{
+  display:block;
+  margin-bottom:5px;
+  color:#111827;
+}
+
+.photo{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.photo img{
+  width:120px;
+  height:140px;
+  border:2px solid #ccc;
+  border-radius:5px;
+}
+
+.exam-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+}
+
+.exam-table th,
+.exam-table td{
+  border:1px solid #ddd;
+  padding:10px;
+  text-align:center;
+}
+
+.exam-table th{
+  background:#10b981;
+  color:white;
+}
+
+.note{
+  margin-top:25px;
+  font-size:14px;
+  color:#444;
+}
+
+.button-container{
+  text-align:center;
+  margin-top:30px;
+}
+
+button{
+  padding:12px 20px;
+  border:none;
+  background:#10b981;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+button:hover{
+  background:#059669;
+}
+
+@media print {
+
+  button{
+    display:none;
+  }
+
+  body{
+    background:white;
+  }
+
+  .container{
+    box-shadow:none;
+    margin:0;
+    width:100%;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+
+    <img src="./icons/vignan.png" alt="College Logo">
+
+    <h1>Hall Ticket</h1>
+
+    <h3>Vignan University</h3>
+
+  </div>
+
+  <!-- STUDENT PHOTO -->
+  <div class="photo">
+
+    <img
+      id="studentPhoto"
+      src="https://via.placeholder.com/120x140"
+      alt="Student Photo"
+    >
+
+  </div>
+
+  <!-- STUDENT DETAILS -->
+  <div class="details">
+
+    <div class="detail-box">
+      <strong>Student Name</strong>
+      <span id="studentName"></span>
+    </div>
+
+    <div class="detail-box">
+      <strong>Registration Number</strong>
+      <span id="regNo"></span>
+    </div>
+
+    <div class="detail-box">
+      <strong>Course</strong>
+      <span id="course"></span>
+    </div>
+
+    <div class="detail-box">
+      <strong>Branch</strong>
+      <span id="branch"></span>
+    </div>
+
+    <div class="detail-box">
+      <strong>Year</strong>
+      <span id="year"></span>
+    </div>
+
+    <div class="detail-box">
+      <strong>Semester</strong>
+      <span id="semester"></span>
+    </div>
+
+  </div>
+
+  <!-- EXAM TABLE -->
+  <table class="exam-table">
+
+    <thead>
+      <tr>
+        <th>Course Code</th>
+        <th>Course Name</th>
+      </tr>
+    </thead>
+
+    <tbody id="courseTable"></tbody>
+
+  </table>
+
+  <!-- INSTRUCTIONS -->
+  <div class="note">
+
+    <strong>Instructions:</strong>
+
+    <ul>
+      <li>Carry this hall ticket to examination hall.</li>
+      <li>Bring valid college ID card.</li>
+      <li>Reach examination hall 30 minutes before exam.</li>
+      <li>Electronic gadgets are strictly prohibited.</li>
+    </ul>
+
+  </div>
+
+  <!-- DOWNLOAD BUTTON -->
+  <div class="button-container">
+
+    <button onclick="downloadHallTicket()">
+      Download Hall Ticket
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+// =====================================
+// GET USER DATA FROM SESSION STORAGE
+// =====================================
+
+const userData = JSON.parse(
+  sessionStorage.getItem("userData")
+);
+
+// =====================================
+// CHECK USER DATA
+// =====================================
+
+if(!userData){
+
+  alert("No user data found");
+
+  window.location.href = "./login.html";
+}
+
+// =====================================
+// SET STUDENT DETAILS
+// =====================================
+
+document.getElementById("studentName")
+  .innerText = userData.name || "N/A";
+
+
+document.getElementById("regNo")
+  .innerText = userData.regNo || "N/A";
+
+
+document.getElementById("course")
+  .innerText = userData.course || "N/A";
+
+
+document.getElementById("branch")
+  .innerText = userData.branch || "N/A";
+
+
+document.getElementById("year")
+  .innerText = userData.year || "N/A";
+
+
+document.getElementById("semester")
+  .innerText = userData.semester || "N/A";
+
+// =====================================
+// OPTIONAL STUDENT PHOTO
+// =====================================
+
+if(userData.photo){
+
+  document.getElementById("studentPhoto")
+    .src = userData.photo;
+}
+
+// =====================================
+// LOAD CURRENT COURSES
+// =====================================
+
+const courses = userData.currentCourses || [];
+
+const table =
+  document.getElementById("courseTable");
+
+if(courses.length === 0){
+
+  table.innerHTML = `
+    <tr>
+      <td colspan="2">
+        No courses available
+      </td>
+    </tr>
+  `;
+}
+
+courses.forEach(course => {
+
+  const row = document.createElement("tr");
+
+  row.innerHTML = `
+
+    <td>${course.courseCode}</td>
+
+    <td>${course.courseName}</td>
+
+  `;
+
+  table.appendChild(row);
+
+});
+
+// =====================================
+// DOWNLOAD / PRINT
+// =====================================
+
+function downloadHallTicket(){
+
+  window.print();
+}
+
+</script>
+
+</body>
 </html>
+
