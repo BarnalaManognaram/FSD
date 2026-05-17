@@ -8,6 +8,20 @@ const courseSchema = new mongoose.Schema({
   marks: Number,
   grade: String
 }, { _id: false });
+const currentCourseSchema = new mongoose.Schema({
+  courseName: { type: String, required: true },
+  courseCode: String,
+  year: Number,
+  semester: Number,
+  T1: Number,
+  T2: Number,
+  T3: Number, 
+  T4: Number,
+  T5_1: Number,
+  T5_2: Number,
+  T5_3: Number,
+  T5_4: Number,
+}, { _id: false });
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -29,7 +43,7 @@ const userSchema = new mongoose.Schema({
   },
 
   courses: [courseSchema],
-
+  currentCourses: [currentCourseSchema],
   password: { type: String, required: true }
 
 }, { timestamps: true });

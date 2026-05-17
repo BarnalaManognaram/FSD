@@ -8,7 +8,8 @@ const {
   updateUser,
   deleteUser,
   loginUser,
-  getCoursesBySemester
+  getCoursesBySemester,
+  getCurrentCourses
 } = require('../controllers/userController');
 
 // Routes
@@ -18,5 +19,6 @@ router.post('/', createUser);
 router.put('/:regNo', updateUser);
 router.delete('/:regNo', deleteUser);
 router.post('/login', loginUser);
-router.get('/currentCourses/:regNo/', getCoursesBySemester);
+router.get('/getCoursesBySemester/:regNo/', getCoursesBySemester);
+router.get('/getCurrentCourses/:regNo/', getCurrentCourses);
 module.exports = router;

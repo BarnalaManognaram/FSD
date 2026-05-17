@@ -56,19 +56,34 @@ exports.createUser = async (req, res) => {
         courseCode: "CS101",
         year: 1,
         semester: 1,
-        marks: 0,
-        grade: "NA"
+        marks: 90,
+        grade: "A"
       },
       {
         courseName: "DSA",
         courseCode: "CS102",
         year: 1,
-        semester: 2,
-        marks: 0,
-        grade: "NA"
+        semester: 1,
+        marks: 95,
+        grade: "O"
       }
     ];
-
+    const defaultCurrentCourses = [
+  {
+    courseName: "DBMS",
+    courseCode: "CS201",
+    year: 2,
+    semester: 1,
+    T1: 20,
+    T2: 5,
+    T3: 5,
+    T4: 40,
+    T5_1: 20,
+    T5_2: 20,
+    T5_3: 20,
+    T5_4: 20
+  }
+];
     const newUser = await User.create({
       name,
       regNo: regNo.trim().toUpperCase(),  // ✅ standardize regNo
@@ -80,6 +95,7 @@ exports.createUser = async (req, res) => {
       cgpa,
       phone,
       courses: defaultCourses,
+      currentCourses: defaultCurrentCourses,  
       address,
       password: regNo.trim().toUpperCase()  // ✅ default password = regNo
     });
@@ -228,6 +244,51 @@ exports.getCoursesBySemester = async (req, res) => {
       200,
       true,
       courses
+    );
+
+  } catch (error) {
+
+    sendResponse(
+      res,
+      500,
+      false,
+      null,
+      error.message
+    );
+  }
+};
+
+exports.getCurrentCourses = async (req, res) => {
+
+  try {
+
+    const regNo = req.params.regNo
+      .toUpperCase()
+      .trim();
+
+    // Fetch only currentCourses
+    const user = await User.findOne(
+      { regNo },
+      { currentCourses: 1, _id: 0 }
+    );
+
+    if (!user) {
+
+      return sendResponse(
+        res,
+        404,
+        false,
+        null,
+        "User not found"
+      );
+    }
+
+    // Return directly from currentCourses array
+    sendResponse(
+      res,
+      200,
+      true,
+      user.currentCourses
     );
 
   } catch (error) {
