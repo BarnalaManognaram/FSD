@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Admin Dashboard</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:#f4f6f9;
+    }
+
+    /* ================= NAVBAR ================= */
+
+    .navbar{
+
+      width:100%;
+
+      background:#10b981;
+
+      padding:15px 30px;
+
+      display:flex;
+
+      justify-content:space-between;
+
+      align-items:center;
+
+      color:white;
+
+      position:sticky;
+
+      top:0;
+
+      z-index:1000;
+
+    }
+
+    .navbar h2{
+      font-size:24px;
+    }
+
+    .logout-btn{
+
+      background:#059669;
+
+      border:none;
+
+      color:white;
+
+      padding:10px 18px;
+
+      border-radius:6px;
+
+      cursor:pointer;
+
+      font-weight:bold;
+
+    }
+
+    .logout-btn:hover{
+      background:darkred;
+    }
+
+    /* ================= CONTAINER ================= */
+
+    .container{
+
+      width:95%;
+
+      margin:30px auto;
+
+    }
+
+    /* ================= CARD ================= */
+
+    .card{
+
+      background:white;
+
+      border-radius:12px;
+
+      padding:20px;
+
+      margin-bottom:25px;
+
+      box-shadow:0 2px 10px rgba(0,0,0,0.1);
+
+      overflow-x:auto;
+
+    }
+
+    .card h2{
+
+      margin-bottom:20px;
+
+      color:#333;
+
+    }
+
+    /* ================= FORM ================= */
+
+    form{
+
+      display:grid;
+
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+      gap:15px;
+
+    }
+
+    input{
+
+      padding:12px;
+
+      border:1px solid #ccc;
+
+      border-radius:6px;
+
+      width:100%;
+
+    }
+
+    /* ================= TABLE ================= */
+
+    table{
+
+      width:100%;
+
+      border-collapse:collapse;
+
+      min-width:900px;
+
+    }
+
+    table th{
+
+      background:#10b981;
+
+      color:white;
+
+      padding:14px;
+
+      text-align:left;
+
+    }
+
+    table td{
+
+      padding:12px;
+
+      border-bottom:1px solid #ddd;
+
+    }
+
+    table tr:hover{
+
+      background:#f1f1f1;
+
+    }
+
+    /* ================= BUTTONS ================= */
+
+    .btn{
+
+      border:none;
+
+      padding:10px 15px;
+
+      border-radius:6px;
+
+      cursor:pointer;
+
+      color:white;
+
+      font-weight:bold;
+
+    }
+
+    .add-btn{
+
+      background:#10b981;
+
+    }
+
+    .add-btn:hover{
+
+      background:#059669;
+
+    }
+
+    .register-btn{
+
+      background:#10b981;
+
+    }
+
+    .register-btn:hover{
+
+      background:#059669;
+
+    }
+
+    /* ================= MODAL ================= */
+
+    .modal{
+
+      width:100%;
+
+      height:100vh;
+
+      position:fixed;
+
+      top:0;
+
+      left:0;
+
+      background:rgba(0,0,0,0.5);
+
+      display:none;
+
+      justify-content:center;
+
+      align-items:center;
+
+      padding:20px;
+
+      overflow-y:auto;
+
+      z-index:2000;
+
+    }
+
+    .modal-content{
+
+      background:white;
+
+      width:100%;
+
+      max-width:500px;
+
+      padding:25px;
+
+      border-radius:10px;
+
+      max-height:90vh;
+
+      overflow-y:auto;
+
+      position:relative;
+
+    }
+
+    /* ================= MODAL HEADER ================= */
+
+    .modal-header{
+
+      display:flex;
+
+      justify-content:space-between;
+
+      align-items:center;
+
+      margin-bottom:20px;
+
+    }
+
+    .close-icon{
+
+      font-size:32px;
+
+      font-weight:bold;
+
+      cursor:pointer;
+
+      color:#555;
+
+      transition:0.3s;
+
+      line-height:1;
+
+    }
+
+    .close-icon:hover{
+
+      color:red;
+
+    }
+
+    /* ================= SCROLLBAR ================= */
+
+    .modal-content::-webkit-scrollbar{
+      width:8px;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb{
+      background:#888;
+      border-radius:10px;
+    }
+
+    /* ================= MESSAGE ================= */
+
+    .success{
+
+      color:#10b981;
+
+      margin-top:10px;
+
+    }
+
+    .error{
+
+      color:red;
+
+      margin-top:10px;
+
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media(max-width:768px){
+
+      .navbar{
+
+        flex-direction:column;
+
+        gap:10px;
+
+      }
+
+      table{
+
+        min-width:700px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ================= NAVBAR ================= -->
+
+  <div class="navbar">
+
+    <h2>Student Management Admin</h2>
+
+    <button
+      class="logout-btn"
+      onclick="logout()"out
+    >
+      Logout
+    </button>
+
+  </div>
+
+
+
+  <!-- ================= CONTAINER ================= -->
+
+  <div class="container">
+
+    <!-- ================= REGISTER STUDENT ================= -->
+
+    <div class="card">
+
+      <h2>Register Student</h2>
+
+      <form id="registerForm">
+
+        <input
+          type="text"
+          id="name"
+          placeholder="Name"
+          required
+        />
+
+        <input
+          type="text"
+          id="regNo"
+          placeholder="Register Number"
+          required
+        />
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          required
+        />
+
+        <input
+          type="text"
+          id="course"
+          placeholder="Course"
+        />
+
+        <input
+          type="text"
+          id="branch"
+          placeholder="Branch"
+        />
+
+        <input
+          type="number"
+          id="year"
+          placeholder="Year"
+        />
+
+        <input
+          type="number"
+          id="semester"
+          placeholder="Semester"
+        />
+
+        <input
+          type="number"
+          id="cgpa"
+          placeholder="CGPA"
+        />
+
+        <input
+          type="text"
+          id="phone"
+          placeholder="Phone"
+        />
+
+        <input
+          type="text"
+          id="address"
+          placeholder="Address"
+        />
+
+        <button
+          class="btn register-btn"
+          type="submit"
+        >
+          Register Student
+        </button>
+
+      </form>
+
+      <p id="registerMessage"></p>
+
+    </div>
+
+
+
+    <!-- ================= STUDENT LIST ================= -->
+
+    <div class="card">
+
+      <h2>All Students</h2>
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>Name</th>
+            <th>Reg No</th>
+            <th>Email</th>
+            <th>Branch</th>
+            <th>Year</th>
+            <th>Semester</th>
+            <th>Action</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="studentTableBody">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ================= ADD COURSE MODAL ================= -->
+
+  <div
+    class="modal"
+    id="courseModal"
+  >
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h2>Add Current Course</h2>
+
+        <span
+          class="close-icon"
+          onclick="closeModal()"
+        >
+          &times;
+        </span>
+
+      </div>
+
+      <form id="courseForm">
+
+        <input
+          type="hidden"
+          id="studentRegNo"
+        />
+
+        <input
+          type="text"
+          id="courseName"
+          placeholder="Course Name"
+          required
+        />
+
+        <input
+          type="text"
+          id="courseCode"
+          placeholder="Course Code"
+          required
+        />
+
+        <input
+          type="number"
+          id="courseYear"
+          placeholder="Year"
+          required
+        />
+
+        <input
+          type="number"
+          id="courseSemester"
+          placeholder="Semester"
+          required
+        />
+
+        <input
+          type="number"
+          id="T1"
+          placeholder="T1"
+        />
+
+        <input
+          type="number"
+          id="T2"
+          placeholder="T2"
+        />
+
+        <input
+          type="number"
+          id="T3"
+          placeholder="T3"
+        />
+
+        <input
+          type="number"
+          id="T4"
+          placeholder="T4"
+        />
+
+        <input
+          type="number"
+          id="T5_1"
+          placeholder="T5_1"
+        />
+
+        <input
+          type="number"
+          id="T5_2"
+          placeholder="T5_2"
+        />
+
+        <input
+          type="number"
+          id="T5_3"
+          placeholder="T5_3"
+        />
+
+        <input
+          type="number"
+          id="T5_4"
+          placeholder="T5_4"
+        />
+
+        <button
+          class="btn add-btn"
+          type="submit"
+        >
+          Add Course
+        </button>
+
+      </form>
+
+      <p id="courseMessage"></p>
+
+    </div>
+
+  </div>
+
+
+
+  <script>
+
+    const BASE_URL = "http://localhost:3000";
+
+
+
+    // ================= LOGOUT =================
+
+    function logout(){
+
+      alert("Logged Out");
+
+      location.reload();
+
+    }
+
+
+
+    // ================= REGISTER STUDENT =================
+
+    const registerForm =
+      document.getElementById("registerForm");
+
+    registerForm.addEventListener(
+      "submit",
+      async (e) => {
+
+        e.preventDefault();
+
+        const studentData = {
+
+          name:
+            document.getElementById("name").value,
+
+          regNo:
+            document.getElementById("regNo").value,
+
+          email:
+            document.getElementById("email").value,
+
+          course:
+            document.getElementById("course").value,
+
+          branch:
+            document.getElementById("branch").value,
+
+          year:
+            document.getElementById("year").value,
+
+          semester:
+            document.getElementById("semester").value,
+
+          cgpa:
+            document.getElementById("cgpa").value,
+
+          phone:
+            document.getElementById("phone").value,
+
+          address:
+            document.getElementById("address").value
+
+        };
+
+        try{
+
+          const response =
+            await fetch(`${BASE_URL}/`,{
+
+              method:"POST",
+
+              headers:{
+                "Content-Type":"application/json"
+              },
+
+              body:JSON.stringify(studentData)
+
+            });
+
+          const data = await response.json();
+
+          const msg =
+            document.getElementById("registerMessage");
+
+          if(data.success){
+
+            msg.className = "success";
+
+            msg.innerText =
+              "Student Registered Successfully";
+
+            registerForm.reset();
+
+            getStudents();
+
+          }else{
+
+            msg.className = "error";
+
+            msg.innerText = data.message;
+
+          }
+
+        }catch(error){
+
+          console.log(error);
+
+        }
+
+      }
+    );
+
+
+
+    // ================= GET STUDENTS =================
+
+    async function getStudents(){
+
+      try{
+
+        const response =
+          await fetch(`${BASE_URL}/`);
+
+        const result =
+          await response.json();
+
+        const tableBody =
+          document.getElementById("studentTableBody");
+
+        tableBody.innerHTML = "";
+
+        result.data.forEach(student => {
+
+          tableBody.innerHTML += `
+
+            <tr>
+
+              <td>${student.name}</td>
+
+              <td>${student.regNo}</td>
+
+              <td>${student.email}</td>
+
+              <td>${student.branch}</td>
+
+              <td>${student.year}</td>
+
+              <td>${student.semester}</td>
+
+              <td>
+
+                <button
+                  class="btn add-btn"
+                  onclick="openModal('${student.regNo}')"
+                >
+                  Add Course
+                </button>
+
+              </td>
+
+            </tr>
+
+          `;
+
+        });
+
+      }catch(error){
+
+        console.log(error);
+
+      }
+
+    }
+
+
+
+    // ================= OPEN MODAL =================
+
+    function openModal(regNo){
+
+      document.getElementById("courseModal")
+        .style.display = "flex";
+
+      document.getElementById("studentRegNo")
+        .value = regNo;
+
+    }
+
+
+
+    // ================= CLOSE MODAL =================
+
+    function closeModal(){
+
+      document.getElementById("courseModal")
+        .style.display = "none";
+
+    }
+
+
+
+    // ================= ADD COURSE =================
+
+    const courseForm =
+      document.getElementById("courseForm");
+
+    courseForm.addEventListener(
+      "submit",
+      async (e) => {
+
+        e.preventDefault();
+
+        const regNo =
+          document.getElementById("studentRegNo").value;
+
+        const courseData = {
+
+          courseName:
+            document.getElementById("courseName").value,
+
+          courseCode:
+            document.getElementById("courseCode").value,
+
+          year:
+            document.getElementById("courseYear").value,
+
+          semester:
+            document.getElementById("courseSemester").value,
+
+          T1:
+            document.getElementById("T1").value,
+
+          T2:
+            document.getElementById("T2").value,
+
+          T3:
+            document.getElementById("T3").value,
+
+          T4:
+            document.getElementById("T4").value,
+
+          T5_1:
+            document.getElementById("T5_1").value,
+
+          T5_2:
+            document.getElementById("T5_2").value,
+
+          T5_3:
+            document.getElementById("T5_3").value,
+
+          T5_4:
+            document.getElementById("T5_4").value
+
+        };
+
+        try{
+
+          const response = await fetch(
+
+            `${BASE_URL}/${regNo}/add-current-course`,
+
+            {
+
+              method:"PUT",
+
+              headers:{
+                "Content-Type":"application/json"
+              },
+
+              body:JSON.stringify(courseData)
+
+            }
+
+          );
+
+          const data =
+            await response.json();
+
+          const msg =
+            document.getElementById("courseMessage");
+
+          if(data.success){
+
+            msg.className = "success";
+
+            msg.innerText =
+              "Course Added Successfully";
+
+            courseForm.reset();
+
+            getStudents();
+
+            setTimeout(() => {
+              closeModal();
+            }, 1000);
+
+          }else{
+
+            msg.className = "error";
+
+            msg.innerText = data.message;
+
+          }
+
+        }catch(error){
+
+          console.log(error);
+
+        }
+
+      }
+    );
+
+
+
+    // ================= INITIAL LOAD =================
+
+    getStudents();
+
+  </script>
+
+</body>
+</html>

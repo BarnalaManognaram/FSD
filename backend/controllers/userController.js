@@ -302,3 +302,146 @@ exports.getCurrentCourses = async (req, res) => {
     );
   }
 };
+exports.addCourseToStudent = async (req, res) => {
+
+  try {
+
+    const regNo = req.params.regNo
+      .toUpperCase()
+      .trim();
+
+    const {
+      courseName,
+      courseCode,
+      year,
+      semester,
+      marks,
+      grade
+    } = req.body;
+
+    // Find user
+    const user = await User.findOne({ regNo });
+
+    if (!user) {
+      return sendResponse(
+        res,
+        404,
+        false,
+        null,
+        "User not found"
+      );
+    }
+
+    // New course object
+    const newCourse = {
+      courseName,
+      courseCode,
+      year,
+      semester,
+      marks,
+      grade
+    };
+
+    // Push into courses array
+    user.courses.push(newCourse);
+
+    await user.save();
+
+    sendResponse(
+      res,
+      200,
+      true,
+      user,
+      "Course added successfully"
+    );
+
+  } catch(error){
+
+    sendResponse(
+      res,
+      500,
+      false,
+      null,
+      error.message
+    );
+  }
+};
+exports.addCurrentCourseToStudent = async (req, res) => {
+
+  try {
+
+    const regNo = req.params.regNo
+      .toUpperCase()
+      .trim();
+
+    const {
+      courseName,
+      courseCode,
+      year,
+      semester,
+      T1,
+      T2,
+      T3,
+      T4,
+      T5_1,
+      T5_2,
+      T5_3,
+      T5_4
+    } = req.body;
+
+    // Find user
+    const user = await User.findOne({ regNo });
+
+    if (!user) {
+
+      return sendResponse(
+        res,
+        404,
+        false,
+        null,
+        "User not found"
+      );
+    }
+
+    // New current course object
+    const newCourse = {
+
+      courseName,
+      courseCode,
+      year,
+      semester,
+      T1,
+      T2,
+      T3,
+      T4,
+      T5_1,
+      T5_2,
+      T5_3,
+      T5_4
+
+    };
+
+    // Push into currentCourses array
+    user.currentCourses.push(newCourse);
+
+    await user.save();
+
+    sendResponse(
+      res,
+      200,
+      true,
+      user,
+      "Current course added successfully"
+    );
+
+  } catch(error){
+
+    sendResponse(
+      res,
+      500,
+      false,
+      null,
+      error.message
+    );
+  }
+};

@@ -20,10 +20,14 @@ async function login(event) {
             sessionStorage.setItem("userData", JSON.stringify(data.data));
           console.log("RegNo:", sessionStorage.getItem("userData") ? JSON.parse(sessionStorage.getItem("userData")).regNo : null);
           console.log("Password:", password);
-
-
-            // ✅ redirect after success
-            window.location.href = "./Home.html";
+          if(data.data.role === "admin"){
+            window.location.href = "../../admin/register.html"
+          }
+          else if(data.data.role === "student"){
+                window.location.href = "./Home.html";
+          }
+          
+        
         } else {
             alert(data.message); // invalid user/password
         }
